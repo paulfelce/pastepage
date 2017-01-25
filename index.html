@@ -1,0 +1,51 @@
+<HTML>
+<HEAD>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script>
+var imgid=1
+
+function pasted(){
+
+  // use event.originalEvent.clipboard for newer chrome versions
+  var items = (event.clipboardData  || event.originalEvent.clipboardData).items;  
+  // find pasted image among pasted items
+  var blob = null;
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].type.indexOf("image") === 0) {
+      blob = items[i].getAsFile();
+    }
+  }
+  // when the user pastes an image,add a new row to the table and put the image in there.
+  // give the row a delete button so we can delete the row if need be
+  if (blob !== null) {
+    var reader = new FileReader();
+    reader.onload = function(event) {
+      imgid++;
+      imgname = "img" + imgid;	  
+     $('#images').prepend('<tr><td><img  id="' + imgname + '"/></td><td style="vertical-align:middle"><button  onclick = "$(this).parent().parent().remove()" >Delete</button></tr>')
+      $('#' + imgname).attr('src', event.target.result);
+    };
+    reader.readAsDataURL(blob);
+  }
+}
+</script>
+<style>
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+</style>
+</HEAD>
+<BODY>
+<input id="pasteArea" placeholder="Paste Image Here" onpaste="pasted()"></input>
+<div id="images">
+<table>
+<tr id="dummy"></tr>
+</table>
+</div>
+
+</BODY>
+</HTML>
