@@ -1,6 +1,7 @@
 <HTML>
 <HEAD>
 <script src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<https://cdn.firebase.com/js/client/2.2.1/firebase.js>
 <script>
 var imgid=1
 
@@ -24,6 +25,11 @@ function pasted(){
       imgname = "img" + imgid;	  
      $('#images').prepend('<tr><td><img  id="' + imgname + '"/></td><td style="vertical-align:middle"><button  onclick = "$(this).parent().parent().remove()" >Delete</button></tr>')
       $('#' + imgname).attr('src', event.target.result);
+      
+      //push the result to firebase
+      var myfbRef = new Firebase('https://blinding-fire-6477.firebaseio.com/pastepage');
+      myfbRef.push({timestamp:"test",img:event.target.result});  
+      
     };
     reader.readAsDataURL(blob);
   }
